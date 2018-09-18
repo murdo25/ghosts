@@ -19,6 +19,8 @@ To do:
             
             Animations: Attack animations, hold position, moving, Angry ghost vs cute ghost
             
+            Force the Ghost to stay in the bounds of the screen. (Optional)
+            
             
             Stretch goals
             
