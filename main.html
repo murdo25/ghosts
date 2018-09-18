@@ -19,8 +19,6 @@
             
             Make the Maze: Auto maze might be easier then expected
             
-            Make the Hero: duplicate ghost code? What needs to be different
-            
             Make the end goals: simple fixed gifs
             
             Make the colisions for goals and ghosts: use the SetInterval.html as a resourse
@@ -44,8 +42,8 @@
 
 
         function keyPress(movement) {
-            console.log([movement[0], movement[1]])
-            let character = document.getElementById("ghost")
+            //console.log([movement[0], movement[1]])
+            let character = document.getElementById(movement[1])
             let moveAmmount = 3
             switch (movement[0]) {
                 case "up":
@@ -77,11 +75,11 @@
         }, true);
 
         function gameLoop() {
-            if (keyState[37] || keyState[65]) {
+            console.log(keyState)
+            if (keyState[37]) {
                 keyPress(["left", "ghost"])
-
             }
-            if (keyState[39] || keyState[68]) {
+            if (keyState[39]) {
                 keyPress(["right", "ghost"])
             }
             if (keyState[38]) {
@@ -90,6 +88,19 @@
             if (keyState[40]) {
                 keyPress(["down", "ghost"])
             }
+            if (keyState[65]) {
+                keyPress(["left", "hero"])
+            }
+            if (keyState[68]) {
+                keyPress(["right", "hero"])
+            }
+            if (keyState[87]) {
+                keyPress(["up", "hero"])
+            }
+            if (keyState[83]) {
+                keyPress(["down", "hero"])
+            }
+
             setTimeout(gameLoop, 10);
         }
 
@@ -101,7 +112,7 @@
 <body>
 
     <img style="position:absolute;left:0; top:0;" id="ghost" src="tumblr_mj03su8MHc1rwai13o1_500.gif" height="50px">
-
+    <img style="position:absolute;left:0; top:0;" id="hero" src="west_dash_animation_by_hero_in_pixels.gif" height="70px">
 </body>
 
 
