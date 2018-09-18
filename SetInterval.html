@@ -1,0 +1,57 @@
+<html>
+<style type="text/css">
+</style>
+
+<head>
+    <script type="text/javascript">
+        var x = "Total Width: " + screen.width
+        var y = "Ttotal Height: " + screen.height
+        var GHOST_X = 0
+        var GHOST_Y = 0
+
+        //Begin the game
+        main()
+
+
+        function main() {
+            SetInterval("Regular")
+        }
+
+        function moveGhost() {
+
+        }
+
+
+        //changes the current interval to newInterval
+        function SetInterval(newInterval) {
+
+            if (newInterval == "Regular") { //runs the simulation and prints it out at 60 fps
+                let fps = 10;
+                //drawFullGrid();
+                setInterval(function() {
+                    //Update();
+                    //Draw(ctx);
+                    console.log(x)
+                    console.log(y)
+                    moveGhost()
+                }, 1000 / fps);
+            }
+
+        }
+
+        function move(event) {
+            //if player or if ghost
+            let character = document.getElementById("ghost").innerHTML;
+            character.style.left = parseInt(character.style.left) + 5 + 'px';
+        }
+    </script>
+</head>
+
+<body onkeypress="move(event)">
+
+    <img id="ghost" src="tumblr_mj03su8MHc1rwai13o1_500.gif">
+
+</body>
+
+
+</html>

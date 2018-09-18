@@ -1,0 +1,51 @@
+<html>
+<link rel="shortcut icon" href="">
+<style type="text/css">
+</style>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+
+    <script type="text/javascript">
+        var keyState = {};
+        window.addEventListener('keydown', function(e) {
+            keyState[e.keyCode || e.which] = true;
+        }, true);
+        window.addEventListener('keyup', function(e) {
+            keyState[e.keyCode || e.which] = false;
+        }, true);
+
+        let x = 100;
+
+        function gameLoop() {
+            let character = document.getElementById("ghost")
+            if (keyState[37] || keyState[65]) {
+                x -= 1;
+                character.style.left = parseInt(character.style.left) - 5 + 'px';
+
+            }
+            if (keyState[39] || keyState[68]) {
+                x += 1;
+                character.style.left = parseInt(character.style.left) + 5 + 'px';
+            }
+
+            console.log(x)
+
+            // redraw/reposition your object here
+            // also redraw/animate any objects not controlled by the user
+
+            setTimeout(gameLoop, 10);
+        }
+        gameLoop();
+    </script>
+</head>
+
+<body>
+
+    <img style="position:absolute;left:0; top:0;" id="ghost" src="tumblr_mj03su8MHc1rwai13o1_500.gif" height="50px">
+
+</body>
+
+
+</html>
