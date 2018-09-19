@@ -9,20 +9,20 @@ To do:
             
             Make the Maze: Auto maze might be easier then expected
             
-            Make the Hero: duplicate ghost code? What needs to be different
-            
             Make the end goals: simple fixed gifs
             
             Make the colisions for goals and ghosts: use the SetInterval.html as a resourse
             
             Powerups: speed increase, biggness, 
             
-            Animations: Attack animations, hold position, moving, Angry ghost vs cute ghost
+            Animations: Attack animations, hold position. (Optional) Angry ghost vs cute ghost
             
             Force the Ghost to stay in the bounds of the screen. (Optional)
             
             
             Stretch goals
+            
+            Make it a real game!!! :D Example: https://www.youtube.com/watch?v=7bKPRtozSmQ
             
             Mini Server: running the game online, with start screen so many people can join together with armies of friends.
             
