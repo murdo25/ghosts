@@ -54,9 +54,15 @@
                     break
                 case "left":
                     character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    character.style.transform = "scaleX(-1)"
+                    character.style.webkitTransform = "scaleX(-1)"
+
                     break
                 case "right":
                     character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+                    character.style.transform = "scaleX(1)"
+                    character.style.webkitTransform = "scaleX(1)"
+
                     break
 
             }
@@ -112,7 +118,7 @@
 <body>
 
     <img style="position:absolute;left:0; top:0;" id="ghost" src="tumblr_mj03su8MHc1rwai13o1_500.gif" height="50px">
-    <img style="position:absolute;left:0; top:0;" id="hero" src="west_dash_animation_by_hero_in_pixels.gif" height="70px">
+    <img style="position:absolute;left:200; top:200;" id="hero" src="west_dash_animation_by_hero_in_pixels.gif" height="70px">
 </body>
 
 
