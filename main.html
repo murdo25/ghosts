@@ -24,10 +24,11 @@
         var burgerKING = 0
         var theBurgerKING = ""
         var burger_on_map = true
+        var won = false
 
 
 
-        function consume(item, character, top, left) {
+        function consume(item, character, left, top) {
             switch (item) {
                 case "burger":
                     if (burger_on_map == false) {
@@ -42,19 +43,54 @@
 
                     }
                     break
+
+                case "ghost":
+                    if (won) {
+                        break
+                    }
+
+                    let ghost_element = document.getElementById("ghost")
+                    let ghost_x = parseInt(ghost_element.style.left)
+                    let ghost_y = parseInt(ghost_element.style.top)
+                    //console.log("ghost x,y", ghost_x, ghost_y)
+                    let got_the_ghost = checkRadius(left, top, ghost_x, ghost_y, 25)
+                    if (got_the_ghost) {
+                        won = true
+                        removeElement("ghost")
+                        alert("The Ghost Hunter Wins!")
+                    }
+                    break
+
+                case "win":
+                    if (won) {
+                        break
+                    }
+                    let win = checkRadius(left, top, 400, 300, 17)
+                    if (win) {
+                        won = true
+
+                        removeElement("winningSquash")
+                        alert("The Ghost Wins!")
+
+                    }
+                    break
+
             }
         }
 
         function checkRadius(x, y, starting_x, starting_y, radius) {
             x = parseInt(x)
             y = parseInt(y)
+
             let distence_from_centroid = Math.sqrt(Math.pow(x - starting_x, 2) + Math.pow(y - starting_y, 2))
-            //return distence_from_centroid
-            if (radius > distence_from_centroid) {
-                return true
+
+            console.log("dist", distence_from_centroid, "radius", radius, "hunterx", x, "huntery", y, "targetx", starting_x, "targety", starting_y)
+
+            if (radius < distence_from_centroid) {
+                return false
             }
             else {
-                return false
+                return true
             }
         }
 
@@ -107,13 +143,19 @@
                     character.style.transform = "scaleX(1)"
                     character.style.webkitTransform = "scaleX(1)"
                     break
-
             }
 
             //consumables
             //Burger
-            consume("burger", character, character.style.top, character.style.left)
-
+            if (movement[1] == "ghost") {
+                consume("burger", character, character.style.left, character.style.top)
+                consume("win", character, character.style.left, character.style.top)
+            }
+            if (movement[1] == "hunter") {
+                //consume("win", character, character.style.top, character.style.left)
+                consume("ghost", character, character.style.left, character.style.top)
+            }
+            //console.log("moving", character.style.top, character.style.left)
         }
 
 
@@ -174,7 +216,7 @@
     <img style="position:absolute;left:0; top:0;" id="ghost" src="animations/ghost.gif" height="50px">
     <img style="position:absolute;left:200; top:200;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="70px">
     <img style="position:absolute;left:400; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
-
+    <img style="position:absolute;left:400; top:300;" id="winningSquash" src="animations/squash.gif" height="70px">
 
 
 </body>
