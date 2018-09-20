@@ -1,0 +1,353 @@
+<html>
+<link rel="shortcut icon" href="">
+
+<style type="text/css">
+    body {
+        /* background-color: black */
+    }
+</style>
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+    <canvas width="986" height="494" id="mazecanvas">Can't load the maze game, because your browser doesn't support HTML5.</canvas>
+    <noscript>JavaScript is not enabled. To play the game, you should enable it.</noscript>
+        
+
+    <script type="text/javascript">
+        //main state map
+        var keyState = {}
+
+        var x = "Total Width: " + screen.width
+        var y = "Total Height: " + screen.height
+        var currentAnimation = "idle"
+
+        //consumables
+        var burgerKING = 0
+        var theBurgerKING = ""
+        var burger_on_map = true
+        
+        // The Maze
+        
+        var canvas = document.getElementById("mazecanvas");
+        var context = canvas.getContext("2d");
+        var currRectX = 425;
+        var currRectY = 3;
+        var mazeWidth = 986;
+        var mazeHeight = 494;
+        // var intervalVar;
+
+        function drawMazeAndRectangle(rectX, rectY) {
+                makeWhite(0, 0, canvas.width, canvas.height);
+                var mazeImg = new Image();
+                mazeImg.onload = function () {
+                    context.drawImage(mazeImg, 0, 0);
+                    /* drawRectangle(rectX, rectY, "#0000FF");
+                    context.beginPath();
+                    context.arc(542, 122, 7, 0, 2 * Math.PI, false);
+                    context.closePath();
+                    context.fillStyle = '#00FF00';
+                    context.fill();*/
+                };
+                mazeImg.src = "./maze.jpg";
+            }
+            
+            function drawRectangle(x, y, style) {
+                makeWhite(currRectX, currRectY, 50, 50);
+                currRectX = x;
+                currRectY = y;
+                context.beginPath();
+                context.rect(x, y, 50, 50);
+                context.closePath();
+                context.fillStyle = style;
+                context.fill();
+            }
+            function moveRect(e) {
+            var newX;
+            var newY;
+            var movingAllowed;
+            e = e || window.event;
+            switch (e.keyCode) {
+                case 38:   // arrow up key
+                case 87: // W key
+                    newX = currRectX;
+                    newY = currRectY - 3;
+                    break;
+                case 37: // arrow left key
+                case 65: // A key
+                    newX = currRectX - 3;
+                    newY = currRectY;
+                    break;
+                case 40: // arrow down key
+                case 83: // S key
+                    newX = currRectX;
+                    newY = currRectY + 3;
+                    break;
+                case 39: // arrow right key
+                case 68: // D key
+                    newX = currRectX + 3;
+                    newY = currRectY;
+                    break;
+                default: return;
+            }
+            movingAllowed = canMoveTo(newX, newY);
+            if (movingAllowed === 1) {      // 1 means 'the rectangle can move'
+                drawRectangle(newX, newY, "#0000FF");
+                currRectX = newX;
+                currRectY = newY;
+            }
+            else if (movingAllowed === 2) { // 2 means 'the rectangle reached the end point'
+                // clearInterval(intervalVar);
+                makeWhite(0, 0, canvas.width, canvas.height);
+                context.font = "40px Arial";
+                context.fillStyle = "blue";
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.fillText("Congratulations!", canvas.width / 2, canvas.height / 2);
+                window.removeEventListener("keydown", moveRect, true);
+            }
+        }
+        
+        /*function canMoveTo(destX, destY) {
+            var imgData = context.getImageData(destX, destY, 50, 50);
+            var data = imgData.data;
+            var canMove = 1; // 1 means: the rectangle can move
+            if (destX >= 0 && destX <= mazeWidth - 50 && destY >= 0 && destY <= mazeHeight - 25) {
+                for (var i = 0; i < 4 * 50 * 50; i += 4) {
+                    if (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) { // black
+                        canMove = 0; // 0 means: the rectangle can't move
+                        break;
+                    }
+                    else if (data[i] === 0 && data[i + 1] === 255 && data[i + 2] === 0) { // #00FF00
+                        canMove = 2; // 2 means: the end point is reached
+                        break;
+                    }
+                }
+            }
+            else {
+                canMove = 0;
+            }
+            return canMove;
+        }*/
+        
+        function canMoveTo(character, destX, destY) {
+            console.log(destX + " " + destY + " " + character.width + " " + character.height);
+            var imgData = context.getImageData(destX, destY, parseInt(character.width), parseInt(character.height));
+            var data = imgData.data;
+            var canMove = 1; // 1 means: the rectangle can move
+            if (destX >= 0 && destX <= mazeWidth - character.width && destY >= 0 && destY <= mazeHeight - character.height) {
+                for (var i = 0; i < 4 * character.width * character.height; i += 4) {
+                    if (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) { // black
+                        canMove = 0; // 0 means: the rectangle can't move
+                        break;
+                    }
+                    else if (data[i] === 0 && data[i + 1] === 255 && data[i + 2] === 0) { // #00FF00
+                        canMove = 2; // 2 means: the end point is reached
+                        break;
+                    }
+                }
+            }
+            else {
+                canMove = 0;
+            }
+            return canMove;
+        }
+        
+        function makeWhite(x, y, w, h) {
+            context.beginPath();
+            context.rect(x, y, w, h);
+            context.closePath();
+            context.fillStyle = "white";
+            context.fill();
+        }
+        
+        drawMazeAndRectangle(425, 3);
+        window.addEventListener("keydown", moveRect, true);
+        
+        // End of The Maze
+
+        function consume(item, character, top, left) {
+            switch (item) {
+                case "burger":
+                    if (burger_on_map == false) {
+                        break
+                    }
+                    let burgered = checkRadius(top, left, 15, 400, 105)
+                    if (burgered) {
+                        burgerKING = 140
+                        theBurgerKING = character
+                        removeElement("burger")
+                        burger_on_map = false
+
+                    }
+                    break
+            }
+        }
+
+        function checkRadius(x, y, starting_x, starting_y, radius) {
+            x = parseInt(x)
+            y = parseInt(y)
+            let distence_from_centroid = Math.sqrt(Math.pow(x - starting_x, 2) + Math.pow(y - starting_y, 2))
+            //return distence_from_centroid
+            if (radius > distence_from_centroid) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+
+        function removeElement(elementId) {
+            // Removes an element from the document
+            var element = document.getElementById(elementId);
+            if (element != null) {
+                element.parentNode.removeChild(element)
+            }
+
+            console.log('removed')
+
+        }
+
+        function keyPress(movement) {
+
+            let character = document.getElementById(movement[1])
+
+            //if the dude is running
+            if (movement[1] == "hunter") {
+                if (currentAnimation != "dash") {
+                    document.getElementById(movement[1]).src = "animations/west_dash_animation_by_hero_in_pixels.gif"
+                    currentAnimation = "dash"
+                }
+
+            }
+
+            let moveAmmount = 1
+
+            if (burgerKING > 0 && character == theBurgerKING) {
+                moveAmmount = 5
+                burgerKING -= 1
+            }
+
+
+            switch (movement[0]) {
+                
+                case "up":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
+                    character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
+                    }
+                    
+                    break
+                case "down":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
+                    character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
+                    }
+                    
+                    break
+                case "left":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
+                    character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+                    }
+                    
+                    character.style.transform = "scaleX(-1)"
+                    character.style.webkitTransform = "scaleX(-1)"
+                    break
+                case "right":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
+                    character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    }
+                    
+                    character.style.transform = "scaleX(1)"
+                    character.style.webkitTransform = "scaleX(1)"
+                    break
+            }
+            
+            
+
+            //consumables
+            //Burger
+            consume("burger", character, character.style.top, character.style.left)
+
+        }
+
+
+
+
+
+        window.addEventListener('keydown', function(e) {
+            keyState[e.keyCode || e.which] = true;
+        }, true);
+
+        window.addEventListener('keyup', function(e) {
+            keyState[e.keyCode || e.which] = false;
+            if (e.keyCode > 40) {
+                if (currentAnimation == "dash") {
+                    currentAnimation = "idle"
+                    document.getElementById("hunter").src = "animations/west_idle_animation_by_hero_in_pixels.gif"
+                }
+            }
+        }, true);
+
+        function gameLoop() {
+            //console.log(keyState)
+            if (keyState[37]) {
+                keyPress(["left", "ghost"])
+            }
+            if (keyState[39]) {
+                keyPress(["right", "ghost"])
+            }
+            if (keyState[38]) {
+                keyPress(["up", "ghost"])
+            }
+            if (keyState[40]) {
+                keyPress(["down", "ghost"])
+            }
+            if (keyState[65]) {
+                keyPress(["left", "hunter"])
+            }
+            if (keyState[68]) {
+                keyPress(["right", "hunter"])
+            }
+            if (keyState[87]) {
+                keyPress(["up", "hunter"])
+            }
+            if (keyState[83]) {
+                keyPress(["down", "hunter"])
+            }
+
+            setTimeout(gameLoop, 10);
+        }
+
+
+        gameLoop()
+    </script>
+</head>
+
+<body>
+
+    <img style="position:absolute;left:20; top:20;" id="ghost" src="animations/ghost.gif" height="50px">
+    <img style="position:absolute;left:915; top:420;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="50px">
+    <img style="position:absolute;left:420; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
+
+
+
+</body>
+
+
+</html>
