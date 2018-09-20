@@ -41,6 +41,7 @@
 
         var x = "Total Width: " + screen.width
         var y = "Total Height: " + screen.height
+        var currentAnimation = "idle"
 
         /*
         function checkBounds(obj, movement) {
@@ -61,9 +62,12 @@
 
             //console.log(character.offsetLeft, character.offsetTop)
             //if the dude is running
-            if (movement[1] == "hunter" && document.getElementById(movement[1]).src != "west_dash_animation_by_hero_in_pixels.gif") {
-                document.getElementById(movement[1]).src = "west_dash_animation_by_hero_in_pixels.gif"
-                //console.log(document.getElementById(movement[1]).src)
+            if (movement[1] == "hunter") {
+                if (currentAnimation != "dash") {
+                    document.getElementById(movement[1]).src = "west_dash_animation_by_hero_in_pixels.gif"
+                    currentAnimation = "dash"
+                }
+
             }
 
             let moveAmmount = 3
@@ -100,8 +104,10 @@
         window.addEventListener('keyup', function(e) {
             keyState[e.keyCode || e.which] = false;
             if (e.keyCode > 40) {
-                document.getElementById("hunter").src = "west_idle_animation_by_hero_in_pixels.gif"
-                //console.log("idle", e.keyCode)
+                if (currentAnimation == "dash") {
+                    currentAnimation = "idle"
+                    document.getElementById("hunter").src = "west_idle_animation_by_hero_in_pixels.gif"
+                }
             }
         }, true);
 
