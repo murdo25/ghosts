@@ -11,10 +11,12 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
+    <canvas width="986" height="494" id="mazecanvas">Can't load the maze game, because your browser doesn't support HTML5.</canvas>
+    <noscript>JavaScript is not enabled. To play the game, you should enable it.</noscript>
 
     <script type="text/javascript">
         //main state map
-        var keyState = {};
+        var keyState = {}
 
         var x = "Total Width: " + screen.width
         var y = "Total Height: " + screen.height
@@ -27,6 +29,71 @@
         var won = false
 
 
+        // The Maze
+        
+        var canvas = document.getElementById("mazecanvas");
+        var context = canvas.getContext("2d");
+        var currRectX = 425;
+        var currRectY = 3;
+        var mazeWidth = 986;
+        var mazeHeight = 494;
+
+        function drawMazeAndRectangle(rectX, rectY) {
+                makeWhite(0, 0, canvas.width, canvas.height);
+                var mazeImg = new Image();
+                mazeImg.onload = function () {
+                    context.drawImage(mazeImg, 0, 0);
+                };
+                mazeImg.src = ".animation/maze.jpg";
+            }
+            
+            function drawRectangle(x, y, style) {
+                makeWhite(currRectX, currRectY, 50, 50);
+                currRectX = x;
+                currRectY = y;
+                context.beginPath();
+                context.rect(x, y, 50, 50);
+                context.closePath();
+                context.fillStyle = style;
+                context.fill();
+            }
+
+        
+        function canMoveTo(character, destX, destY) {
+            console.log(destX + " " + destY + " " + character.width + " " + character.height);
+            var imgData = context.getImageData(destX, destY, parseInt(character.width), parseInt(character.height));
+            var data = imgData.data;
+            var canMove = 1; // 1 means: the rectangle can move
+            if (destX >= 0 && destX <= mazeWidth - character.width && destY >= 0 && destY <= mazeHeight - character.height) {
+                for (var i = 0; i < 4 * character.width * character.height; i += 4) {
+                    if (data[i] === 0 && data[i + 1] === 0 && data[i + 2] === 0) { // black
+                        canMove = 0; // 0 means: the rectangle can't move
+                        break;
+                    }
+                    else if (data[i] === 0 && data[i + 1] === 255 && data[i + 2] === 0) { // #00FF00
+                        canMove = 2; // 2 means: the end point is reached
+                        break;
+                    }
+                }
+            }
+            else {
+                canMove = 0;
+            }
+            return canMove;
+        }
+        
+        function makeWhite(x, y, w, h) {
+            context.beginPath();
+            context.rect(x, y, w, h);
+            context.closePath();
+            context.fillStyle = "white";
+            context.fill();
+        }
+        
+        drawMazeAndRectangle(425, 3);
+        window.addEventListener("keydown", moveRect, true);
+        
+        // End of The Maze
 
         function consume(item, character, left, top) {
             switch (item) {
@@ -118,7 +185,7 @@
 
             }
 
-            let moveAmmount = 3
+            let moveAmmount = 1
 
             if (burgerKING > 0 && character == theBurgerKING) {
                 moveAmmount = 5
@@ -127,23 +194,54 @@
 
 
             switch (movement[0]) {
+                
                 case "up":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
                     character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
+                    }
+                    
                     break
                 case "down":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
                     character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
+                    }
+                    
                     break
                 case "left":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
                     character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+                    }
+                    
                     character.style.transform = "scaleX(-1)"
                     character.style.webkitTransform = "scaleX(-1)"
                     break
                 case "right":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
+                    
                     character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+                    if (movingAllowed == 0)
+                    {
+                        character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    }
+                    
                     character.style.transform = "scaleX(1)"
                     character.style.webkitTransform = "scaleX(1)"
                     break
             }
+            
+            
 
             //consumables
             //Burger
@@ -213,9 +311,9 @@
 
 <body>
 
-    <img style="position:absolute;left:0; top:0;" id="ghost" src="animations/ghost.gif" height="50px">
-    <img style="position:absolute;left:200; top:200;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="70px">
-    <img style="position:absolute;left:400; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
+    <img style="position:absolute;left:20; top:20;" id="ghost" src="animations/ghost.gif" height="50px">
+    <img style="position:absolute;left:915; top:420;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="50px">
+    <img style="position:absolute;left:420; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
     <img style="position:absolute;left:400; top:300;" id="winningSquash" src="animations/squash.gif" height="70px">
 
 
