@@ -15,7 +15,7 @@ To do:
             
             Powerups: speed increase, biggness, 
             
-            Animations: Attack animations, hold position. (Optional) Angry ghost vs cute ghost
+            Animations: Attack animations (Optional) Angry ghost vs cute ghost
             
             Force the Ghost to stay in the bounds of the screen. (Optional)
             
