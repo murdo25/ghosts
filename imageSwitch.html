@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    function test() {
+        alert(window.document.pic.src);
+        //alert msg print like http://localhost/test/pic1.png
+        if (document.pic.src == 'west_idle_animation_by_hero_in_pixels.gif') {
+
+            document.pic.src = 'west_dash_animation_by_hero_in_pixels.gif';
+        }
+        else {
+            document.pic.src = 'west_idle_animation_by_hero_in_pixels.gif'
+
+        }
+    }
+</script>
+<img src="west_dash_animation_by_hero_in_pixels.gif" name="pic" onclick="test()" />
