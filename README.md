@@ -7,13 +7,7 @@ all the good stuff is in main.html, the rest is just example code that helped co
 To do:
 
             
-            Make the Maze: Auto maze might be easier then expected
-            
-            Make the end goals: simple fixed gifs
-            
-            Make the colisions for goals and ghosts: use the SetInterval.html as a resourse
-            
-            Powerups: speed increase, biggness, 
+            Make the end goals: simple fixed gif
             
             Animations: Attack animations (Optional) Angry ghost vs cute ghost
             
