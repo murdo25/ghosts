@@ -8,69 +8,88 @@
 </style>
 
 <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 
     <script type="text/javascript">
-        //https://stackoverflow.com/questions/27123399/how-to-move-an-image-up-and-down-smoothly-with-css  COOL CSS FOR MOVING THINGS SMOOTHLY
-        //position: fixed 
-        /* to do:
-            
-            
-            Make the Maze: Auto maze might be easier then expected
-            
-            Make the end goals: simple fixed gifs
-            
-            Make the colisions for goals and ghosts: use the SetInterval.html as a resourse
-            
-            Powerups: speed increase, biggness, 
-            
-            Animations: Attack animations, hold position, moving, Angry ghost vs cute ghost
-            
-            
-            !!!!!
-            
-            Mini Server: running the game online, with start screen so many people can join together with armies of friends.
-            
-            
-        
-        
-        */
-
-
+        //main state map
+        var keyState = {};
 
         var x = "Total Width: " + screen.width
         var y = "Total Height: " + screen.height
         var currentAnimation = "idle"
 
-        /*
-        function checkBounds(obj, movement) {
-            
-            
+        //consumables
+        var burgerKING = 0
+        var theBurgerKING = ""
+        var burger_on_map = true
+
+
+
+        function consume(item, character, top, left) {
+            switch (item) {
+                case "burger":
+                    if (burger_on_map == false) {
+                        break
+                    }
+                    let burgered = checkRadius(top, left, 15, 400, 105)
+                    if (burgered) {
+                        burgerKING = 140
+                        theBurgerKING = character
+                        removeElement("burger")
+                        burger_on_map = false
+
+                    }
+                    break
+            }
         }
-        
-        function checkAllObjects(movement){
-            for
-            if(checkBounds())
-            
+
+        function checkRadius(x, y, starting_x, starting_y, radius) {
+            x = parseInt(x)
+            y = parseInt(y)
+            let distence_from_centroid = Math.sqrt(Math.pow(x - starting_x, 2) + Math.pow(y - starting_y, 2))
+            //return distence_from_centroid
+            if (radius > distence_from_centroid) {
+                return true
+            }
+            else {
+                return false
+            }
         }
-        */
+
+        function removeElement(elementId) {
+            // Removes an element from the document
+            var element = document.getElementById(elementId);
+            if (element != null) {
+                element.parentNode.removeChild(element)
+            }
+
+            console.log('removed')
+
+        }
 
         function keyPress(movement) {
-            //console.log([movement[0], movement[1]])
+
             let character = document.getElementById(movement[1])
 
-            //console.log(character.offsetLeft, character.offsetTop)
             //if the dude is running
             if (movement[1] == "hunter") {
                 if (currentAnimation != "dash") {
-                    document.getElementById(movement[1]).src = "west_dash_animation_by_hero_in_pixels.gif"
+                    document.getElementById(movement[1]).src = "animations/west_dash_animation_by_hero_in_pixels.gif"
                     currentAnimation = "dash"
                 }
 
             }
 
             let moveAmmount = 3
+
+            if (burgerKING > 0 && character == theBurgerKING) {
+                moveAmmount = 5
+                burgerKING -= 1
+            }
+
+
             switch (movement[0]) {
                 case "up":
                     character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
@@ -90,10 +109,14 @@
                     break
 
             }
+
+            //consumables
+            //Burger
+            consume("burger", character, character.style.top, character.style.left)
+
         }
 
-        //main state map
-        var keyState = {};
+
 
 
 
@@ -106,7 +129,7 @@
             if (e.keyCode > 40) {
                 if (currentAnimation == "dash") {
                     currentAnimation = "idle"
-                    document.getElementById("hunter").src = "west_idle_animation_by_hero_in_pixels.gif"
+                    document.getElementById("hunter").src = "animations/west_idle_animation_by_hero_in_pixels.gif"
                 }
             }
         }, true);
@@ -148,8 +171,12 @@
 
 <body>
 
-    <img style="position:absolute;left:0; top:0;" id="ghost" src="tumblr_mj03su8MHc1rwai13o1_500.gif" height="50px">
-    <img style="position:absolute;left:200; top:200;" id="hunter" src="west_idle_animation_by_hero_in_pixels.gif" height="70px">
+    <img style="position:absolute;left:0; top:0;" id="ghost" src="animations/ghost.gif" height="50px">
+    <img style="position:absolute;left:200; top:200;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="70px">
+    <img style="position:absolute;left:400; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
+
+
+
 </body>
 
 
