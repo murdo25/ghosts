@@ -1,0 +1,28 @@
+body {
+    background-color: navy;
+    color: lightyellow;
+    font-family: Georgia;
+    text-align: center;
+}
+
+a {
+    background-color: white;
+    color: red;
+    font-size: 36px;
+    padding: 5px;
+    text-decoration: none;
+    
+}
+
+td {
+    padding: 30px;
+}
+
+h1 {
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+h2 {
+    text-decoration: underline;
+}
