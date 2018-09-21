@@ -8,6 +8,7 @@
 </style>
 
 <head>
+    <title>Ghost Hunter</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
@@ -100,7 +101,7 @@
                     if (burger_on_map == false) {
                         break
                     }
-                    let burgered = checkRadius(top, left, 15, 400, 105)
+                    let burgered = checkRadius(top, left,123, 435, 25)
                     if (burgered) {
                         burgerKING = 140
                         theBurgerKING = character
@@ -239,7 +240,7 @@
             //Burger
             if (movement[1] == "ghost") {
                 consume("burger", character, character.style.left, character.style.top)
-                consume("win", character, character.style.left, character.style.top)
+                //consume("win", character, character.style.left, character.style.top)
             }
             if (movement[1] == "hunter") {
                 //consume("win", character, character.style.top, character.style.left)
@@ -315,7 +316,8 @@
     They lived in harmony with all and did no evil. <br> 
     That was… until the fire nation attacked. <br> 
     Now these adorable creatures are chased relentlessly by the proud ghost hunters.<br>  
-    Flee for your life! </p>
+    
+        Flee for your life! </p>
 
 </body>
 
