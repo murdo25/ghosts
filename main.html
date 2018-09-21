@@ -3,7 +3,7 @@
 
 <style type="text/css">
     body {
-        background-color: black
+        background-color: white
     }
 </style>
 
@@ -12,7 +12,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     <canvas width="986" height="494" id="mazecanvas">Can't load the maze game, because your browser doesn't support HTML5.</canvas>
-    <noscript>JavaScript is not enabled. To play the game, you should enable it.</noscript>
 
     <script type="text/javascript">
         //main state map
@@ -30,7 +29,7 @@
 
 
         // The Maze
-        
+
         var canvas = document.getElementById("mazecanvas");
         var context = canvas.getContext("2d");
         var currRectX = 425;
@@ -39,28 +38,28 @@
         var mazeHeight = 494;
 
         function drawMazeAndRectangle(rectX, rectY) {
-                makeWhite(0, 0, canvas.width, canvas.height);
-                var mazeImg = new Image();
-                mazeImg.onload = function () {
-                    context.drawImage(mazeImg, 0, 0);
-                };
-                mazeImg.src = ".animation/maze.jpg";
-            }
-            
-            function drawRectangle(x, y, style) {
-                makeWhite(currRectX, currRectY, 50, 50);
-                currRectX = x;
-                currRectY = y;
-                context.beginPath();
-                context.rect(x, y, 50, 50);
-                context.closePath();
-                context.fillStyle = style;
-                context.fill();
-            }
+            makeWhite(0, 0, canvas.width, canvas.height);
+            var mazeImg = new Image();
+            mazeImg.onload = function() {
+                context.drawImage(mazeImg, 0, 0);
+            };
+            mazeImg.src = "animations/maze.jpg";
+        }
 
-        
+        function drawRectangle(x, y, style) {
+            makeWhite(currRectX, currRectY, 50, 50);
+            currRectX = x;
+            currRectY = y;
+            context.beginPath();
+            context.rect(x, y, 50, 50);
+            context.closePath();
+            context.fillStyle = style;
+            context.fill();
+        }
+
+
         function canMoveTo(character, destX, destY) {
-            console.log(destX + " " + destY + " " + character.width + " " + character.height);
+
             var imgData = context.getImageData(destX, destY, parseInt(character.width), parseInt(character.height));
             var data = imgData.data;
             var canMove = 1; // 1 means: the rectangle can move
@@ -81,7 +80,7 @@
             }
             return canMove;
         }
-        
+
         function makeWhite(x, y, w, h) {
             context.beginPath();
             context.rect(x, y, w, h);
@@ -89,10 +88,10 @@
             context.fillStyle = "white";
             context.fill();
         }
-        
+
         drawMazeAndRectangle(425, 3);
-        window.addEventListener("keydown", moveRect, true);
-        
+        //window.addEventListener("keydown", moveRect, true);
+
         // End of The Maze
 
         function consume(item, character, left, top) {
@@ -115,12 +114,11 @@
                     if (won) {
                         break
                     }
-
                     let ghost_element = document.getElementById("ghost")
                     let ghost_x = parseInt(ghost_element.style.left)
                     let ghost_y = parseInt(ghost_element.style.top)
-                    //console.log("ghost x,y", ghost_x, ghost_y)
-                    let got_the_ghost = checkRadius(left, top, ghost_x, ghost_y, 25)
+                    console.log("hunter", left, top, "ghost x,y", ghost_x, ghost_y)
+                    let got_the_ghost = checkRadius(left, top + 3, ghost_x, ghost_y, 21.5)
                     if (got_the_ghost) {
                         won = true
                         removeElement("ghost")
@@ -132,13 +130,14 @@
                     if (won) {
                         break
                     }
-                    let win = checkRadius(left, top, 400, 300, 17)
-                    if (win) {
+
+                    let win1 = checkRadius(left, top, 990, 253, 43)
+                    let win2 = checkRadius(left, top, 502, 490, 30)
+                    if (win1 || win2) {
                         won = true
-
                         removeElement("winningSquash")
+                        removeElement("hunter")
                         alert("The Ghost Wins!")
-
                     }
                     break
 
@@ -175,6 +174,9 @@
         function keyPress(movement) {
 
             let character = document.getElementById(movement[1])
+            if (character == null) {
+                return
+            }
 
             //if the dude is running
             if (movement[1] == "hunter") {
@@ -185,7 +187,11 @@
 
             }
 
-            let moveAmmount = 1
+            let moveAmmount = 3
+            if (character == "hunter") {
+                moveAmmount = 4
+
+            }
 
             if (burgerKING > 0 && character == theBurgerKING) {
                 moveAmmount = 5
@@ -194,54 +200,40 @@
 
 
             switch (movement[0]) {
-                
                 case "up":
-                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
-                    
-                    character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
-                    if (movingAllowed == 0)
-                    {
-                        character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
-                    }
-                    
-                    break
-                case "down":
-                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
-                    
-                    character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
-                    if (movingAllowed == 0)
-                    {
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top) - moveAmmount);
+                    if (movingAllowed != 0 || won == true) {
                         character.style.top = parseInt(character.style.top) - moveAmmount + 'px';
                     }
-                    
                     break
-                case "left":
-                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
-                    
-                    character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
-                    if (movingAllowed == 0)
-                    {
-                        character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
+
+                case "down":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top) + moveAmmount);
+                    if (movingAllowed != 0 || won == true) {
+                        character.style.top = parseInt(character.style.top) + moveAmmount + 'px';
                     }
-                    
+                    break
+
+                case "left":
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left) - moveAmmount, parseInt(character.style.top));
+                    if (movingAllowed != 0 || won == true) {
+                        character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    }
                     character.style.transform = "scaleX(-1)"
                     character.style.webkitTransform = "scaleX(-1)"
                     break
+
                 case "right":
-                    var movingAllowed = canMoveTo(character, parseInt(character.style.left), parseInt(character.style.top));
-                    
-                    character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
-                    if (movingAllowed == 0)
-                    {
-                        character.style.left = parseInt(character.style.left) - moveAmmount + 'px';
+                    var movingAllowed = canMoveTo(character, parseInt(character.style.left) + moveAmmount, parseInt(character.style.top));
+                    if (movingAllowed != 0 || won == true) {
+                        character.style.left = parseInt(character.style.left) + moveAmmount + 'px';
                     }
-                    
                     character.style.transform = "scaleX(1)"
                     character.style.webkitTransform = "scaleX(1)"
                     break
             }
-            
-            
+
+
 
             //consumables
             //Burger
@@ -306,17 +298,18 @@
 
 
         gameLoop()
+        //<img style="position:absolute;left:400; top:300;" id="winningSquash" src="animations/squash.gif" height="70px">
     </script>
 </head>
 
 <body>
 
-    <img style="position:absolute;left:20; top:20;" id="ghost" src="animations/ghost.gif" height="50px">
+    <img style="position:absolute;left:30; top:30;" id="ghost" src="animations/ghost.gif" height="30px">
     <img style="position:absolute;left:915; top:420;" id="hunter" src="animations/west_idle_animation_by_hero_in_pixels.gif" height="50px">
     <img style="position:absolute;left:420; top:100;" id="burger" src="animations/princessBurger.jpg" height="70px">
-    <img style="position:absolute;left:400; top:300;" id="winningSquash" src="animations/squash.gif" height="70px">
 
-
+    <img style="position:absolute;left:985; top:250;" id="exit1" src="animations/white-gloss-swatch-600x600_3.jpg" height="50px">
+    <img style="position:absolute;left:502; top:491;" id="exit2" src="animations/white-gloss-swatch-600x600_3.jpg" width="30px" height="70px">
 </body>
 
 
